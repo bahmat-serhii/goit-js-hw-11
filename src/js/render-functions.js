@@ -1,52 +1,58 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const form = document.querySelector('.form');
+const gallery = document.querySelector('.gallery');
 
-form.addEventListener('submit', event => {
-  event.preventDefault();
+export function renderImages(images) {
+  gallery.innerHTML = images
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) =>
+        `<li class="photo-card">
+          <a href="${largeImageURL}">
+            <img class="photo-img" src="${webformatURL}" alt="${tags}" />
+          </a>
+          <div class="info">
+            <p class="info-item">
+              <b>Likes</b>
+              ${likes}
+            </p>
+            <p class="info-item">
+              <b>Views</b>
+              ${views}
+            </p>
+            <p class="info-item">
+              <b>Comments</b>
+              ${comments}
+            </p>
+            <p class="info-item">
+              <b>Downloads</b>
+              ${downloads}
+            </p>
+          </div>
+        </li>`
+    )
+    .join('');
 
-  const delay = parseInt(form.elements.delay.value);
-  const state = form.elements.state.value;
+  new SimpleLightbox('.gallery a').refresh();
+}
 
-  createPromise(delay, state)
-    .then(delay => {
-      iziToast.success({
-        title: 'Success',
-        message: `✅ Fulfilled promise in ${delay}ms`,
-        position: 'topRight',
-      });
-    })
-    .catch(delay => {
-      iziToast.error({
-        title: 'Error',
-        message: `❌ Rejected promise in ${delay}ms`,
-        position: 'topRight',
-      });
-    });
-});
+export function clearGallery() {
+  gallery.innerHTML = '';
+}
 
-function createPromise(delay, state) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (state === 'fulfilled') {
-        resolve(delay);
-      } else {
-        reject(delay);
-      }
-    }, delay);
-  });
+export function toggleLoader(isVisible) {
+  document.querySelector('.loader').classList.toggle('hidden', !isVisible);
 }
 
 const classBtn = document.querySelector('button');
 classBtn.classList.add('form-btn');
 const classInput = document.querySelector('input');
 classInput.classList.add('form-input');
-const classFieldSet = document.querySelector('fieldset');
-classFieldSet.classList.add('form-fieldset');
-const classLabel = document.querySelector('label');
-classLabel.classList.add('form-label');
-const classFieldInput = document.querySelectorAll('fieldset input');
-classFieldInput.forEach(item => item.classList.add('form-field-input'));
-const classFieldLabel = document.querySelectorAll('fieldset label');
-classFieldLabel.forEach(item => item.classList.add('form-field-label'));
