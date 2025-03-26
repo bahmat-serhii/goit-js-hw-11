@@ -49,10 +49,10 @@ export function clearGallery() {
 }
 
 export function toggleLoader(isVisible) {
-  document.querySelector('.loader').classList.toggle('hidden', !isVisible);
+  const loader = document.querySelector('.loader');
+  if (isVisible) {
+    loader.classList.remove('hidden');
+  } else {
+    loader.classList.add('hidden');
+  }
 }
-
-const classBtn = document.querySelector('button');
-classBtn.classList.add('form-btn');
-const classInput = document.querySelector('input');
-classInput.classList.add('form-input');
